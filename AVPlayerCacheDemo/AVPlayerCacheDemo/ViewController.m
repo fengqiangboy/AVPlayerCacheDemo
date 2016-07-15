@@ -28,6 +28,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    [self downloadWithUrl:[NSURL URLWithString:VideoUrl]];
+    
     [self setWebSever];
     
     [self buildPlayer];
@@ -42,11 +44,7 @@
 }
 
 - (void)buildPlayer {
-//    NSString *path = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
-//    path = [NSString stringWithFormat:@"%@/video/list.m3u8", path];
-//    NSLog(@"%@", path);
     NSURL *url = [NSURL URLWithString:@"http://localhost:8080/list.m3u8"];
-//    NSLog(@"%@", url);
     
     AVURLAsset *playerAsset = [AVURLAsset assetWithURL:url];
     
