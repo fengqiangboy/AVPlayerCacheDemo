@@ -35,7 +35,7 @@
 
 - (void)setWebSever {
     self.webServer = [[GCDWebServer alloc] init];
-    NSString *path = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject];
+    NSString *path = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
     path = [NSString stringWithFormat:@"%@/video/", path];
     [self.webServer addGETHandlerForBasePath:@"/" directoryPath:path indexFilename:@"list.m3u8" cacheAge:3600 allowRangeRequests:YES];
     [self.webServer startWithPort:8080 bonjourName:nil];
@@ -49,7 +49,6 @@
 //    NSLog(@"%@", url);
     
     AVURLAsset *playerAsset = [AVURLAsset assetWithURL:url];
-    [playerAsset.resourceLoader setDelegate:self queue:dispatch_get_main_queue()];
     
     AVPlayerItem *playerItem = [[AVPlayerItem alloc] initWithAsset:playerAsset];
     
@@ -70,32 +69,35 @@
 
 }
 
-- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
-    [self.player play];
-}
-
-#pragma mark - AVAssetResourceLoaderDelegate
-- (BOOL)resourceLoader:(AVAssetResourceLoader *)resourceLoader shouldWaitForLoadingOfRequestedResource:(AVAssetResourceLoadingRequest *)loadingRequest {
-//    NSLog(@"%@", loadingRequest.request.URL);
-    return NO;
-}
-
--(void)resourceLoader:(AVAssetResourceLoader *)resourceLoader didCancelLoadingRequest:(AVAssetResourceLoadingRequest *)loadingRequest {
-//    NSLog(@"%@", loadingRequest.request.URL);
-}
-
-
 #pragma mark - Event
 - (IBAction)startHandleClick:(UIButton *)sender {
-    
-//    NSString *path = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
-//    path = [NSString stringWithFormat:@"%@/video/list.m3u8", path];
-    //    NSLog(@"%@", path);
-//    NSURL *url = [NSURL fileURLWithPath:path];
-    
     M3U8Handler *m3u8Handler = [M3U8Handler new];
     
     [m3u8Handler praseM3U8With:[NSURL URLWithString:VideoUrl] handlerDelegate:self];
+}
+
+- (IBAction)playerFromLocal:(id)sender {
+    NSURL *url = [NSURL URLWithString:@"http://localhost:8080/list.m3u8"];
+    //    NSLog(@"%@", url);
+    
+    AVURLAsset *playerAsset = [AVURLAsset assetWithURL:url];
+    
+    AVPlayerItem *playerItem = [[AVPlayerItem alloc] initWithAsset:playerAsset];
+    [self.player replaceCurrentItemWithPlayerItem:playerItem];
+}
+
+- (IBAction)playFromNetwork:(id)sender {
+    NSURL *url = [NSURL URLWithString:VideoUrl];
+    //    NSLog(@"%@", url);
+    
+    AVURLAsset *playerAsset = [AVURLAsset assetWithURL:url];
+    
+    AVPlayerItem *playerItem = [[AVPlayerItem alloc] initWithAsset:playerAsset];
+    [self.player replaceCurrentItemWithPlayerItem:playerItem];
+}
+
+- (IBAction)startPlay:(id)sender {
+    [self.player play];
 }
 
 #pragma mark - M3U8HandlerDelegate
@@ -147,13 +149,20 @@
     
     NSURLSessionDownloadTask *downloadTask = [manager downloadTaskWithRequest:request progress:nil destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
         NSString *path = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject];
-        path = [path stringByAppendingPathComponent:@"video"];
-        NSLog(@"path = %@", path);
         NSURL *documentsDirectoryURL = [NSURL fileURLWithPath:path];
         return [documentsDirectoryURL URLByAppendingPathComponent:[response suggestedFilename]];
     } completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
-        NSLog(@"File downloaded to: %@", filePath);
+        NSString *path = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+        path = [path stringByAppendingPathComponent:@"video"];
+        NSURL *documentsDirectoryURL = [NSURL fileURLWithPath:path];
+        documentsDirectoryURL = [documentsDirectoryURL URLByAppendingPathComponent:[response suggestedFilename]];
+        NSFileManager *fileManager = [[NSFileManager alloc] init];
+        NSError *err;
+        [fileManager createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:nil];
+        [fileManager moveItemAtURL:filePath toURL:documentsDirectoryURL error:&err];
+        NSLog(@"File downloaded to: %@", path);
     }];
+    
     [downloadTask resume];
 }
 

@@ -18,10 +18,31 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nKo-Zn-hAV">
-                                <rect key="frame" x="130" y="269" width="60" height="30"/>
+                                <rect key="frame" x="130" y="376" width="60" height="30"/>
                                 <state key="normal" title="开始解析"/>
                                 <connections>
                                     <action selector="startHandleClick:" destination="BYZ-38-t0r" eventType="touchUpInside" id="05H-z8-5VF"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7ZY-or-J9v">
+                                <rect key="frame" x="13" y="425" width="60" height="30"/>
+                                <state key="normal" title="开始播放"/>
+                                <connections>
+                                    <action selector="startPlay:" destination="BYZ-38-t0r" eventType="touchUpInside" id="aah-kH-AZ2"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zcZ-to-F7e">
+                                <rect key="frame" x="240" y="463" width="75" height="30"/>
+                                <state key="normal" title="从网络加载"/>
+                                <connections>
+                                    <action selector="playFromNetwork:" destination="BYZ-38-t0r" eventType="touchUpInside" id="G4i-cX-0hB"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kFB-qY-NpN">
+                                <rect key="frame" x="240" y="425" width="75" height="30"/>
+                                <state key="normal" title="从本地加载"/>
+                                <connections>
+                                    <action selector="playerFromLocal:" destination="BYZ-38-t0r" eventType="touchUpInside" id="T4g-SB-zvd"/>
                                 </connections>
                             </button>
                         </subviews>
