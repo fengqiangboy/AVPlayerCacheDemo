@@ -19,7 +19,7 @@
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nKo-Zn-hAV">
                                 <rect key="frame" x="130" y="376" width="60" height="30"/>
-                                <state key="normal" title="开始解析"/>
+                                <state key="normal" title="开始下载"/>
                                 <connections>
                                     <action selector="startHandleClick:" destination="BYZ-38-t0r" eventType="touchUpInside" id="05H-z8-5VF"/>
                                 </connections>
