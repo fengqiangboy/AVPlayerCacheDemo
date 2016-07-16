@@ -15,7 +15,7 @@
 #import "GCDWebServerRequest.h"
 #import "AFNetworking/AFNetworking.h"
 
-@interface ViewController () <AVAssetResourceLoaderDelegate, M3U8HandlerDelegate>
+@interface ViewController () <M3U8HandlerDelegate>
 
 @property (nonatomic, strong) AVPlayer *player;
 
